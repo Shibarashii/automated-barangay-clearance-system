@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "automatedclearance",
+  "private_key_id": "57f921e52e8f511293a7a0a8d8eef60cb6a5906b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCY5gPRASrmTaQ2\nM3bqKWLCdboZaT+/HHe16ZqQ+QBfGLCrPGSQK4e6uV5n9M2HJH+YuDUuC17mZ9SG\nq12xQ/KfbDV5t3v9cvBQi48Ps4sfQR/pd3nDpeQoA70Uq2dNJ1h1HBwv2XqA+1mu\nLdqx2dgLSwXyh0gPB/F8VIiLtCuNEDu5FwAhy7JFPCkW4DXBW2WC/sYbI16wkTy7\ni8Qrgq2jlWro5GadIf1MblnjsVAFPgK24DVRCfl4jXt1tB+B/v87Hn57raFPp2aI\npTS3d7hO+mMvTCYllNlmlRfd0FV7WUZvMig1g6JQ9cItnyw3ZrKIKN1Y+Ud+waHY\n2Mc9Ca89AgMBAAECggEACJqpDFHsgBlObF5pCrRZgmftmRB7Ld4EPpBuykm446EY\nEArN/e71LGTSEzeLeVdsdsOm+nhZVs3w/8MU+qzAMoh8WeUhbRnSvDWeT1vjMFcR\n3KmEiKYFONs9ALTEk2rrZ2u1ilvKsQdz/IFIFUoVBk2qgANs4qunwz9ej74L1VxG\nOd/hYFyTT1YAeyglCWfpKtZsGhm0/Pz9TF+duY9QWuy8V0Qxpq8ZgRplU53Wbd2K\ni9EXq4KDzDQxUNtpZbO7j9+k7v/4S9tdLCUJnw7/Bs1ns7ucxFNC5VzvwwVkDLnw\ndXubcN8rXTQtIHHvcZk+mmimHSPDkAL8m5o6X6sdAQKBgQDK+tQsIjGG/0nF49Km\nUBTq79CzLAtsnH7eacG0gOi9aCpRF/8F84IIFYnYX7T3YXe+J215xyWG5D4pCUbk\n3sv1pP+iSe+mt9i4hdEClctKA92S794w9XRYbDofT15MXhRpWkH6sRZnUK8HFCGB\ntWJeJ/ytYkLBfww+SXxWVLoZKQKBgQDA1kVhCBL5Bf6d+3pjdwpTgxq2KP+TNc8E\nQ5C32Fe5Gb8BGrc5CRY6DzHNu0wrZvg3saAGvfC2aql0gKUoykVGa7GvTtVZ12oY\nqmFmmiJKWcxljGNfQeUjpEsQ/kLl+4jOrwiMKkjXS9S6x16TfqMisvdlbWuB2X4X\nlHCSpmcj9QKBgByXDfGVc2JvbOW5vD7+wqOA2eWSy50lwdz0CnuxOJcNKAC6H4qo\nDOW0mvDmMigyC1q2VP41Jb0FQxgmnVy5YQMdlYA3Z9EUzirXdmQl0zd+qeP7c1F0\nEUovHFSyqjaZfciFFQwJi31L6QtXM40AjnVyrm2BjKOSkJfpY+EJGBlZAoGBAJVS\nVo74bZifZ7Z10SPMPhbE4p5DyQP5GsC2gQ2bXPJcWWdFhLOJschrk6k3a5gAOB0I\nUl5mHkti9KzeIQYg+tu48PJLHTJgeCt5Y8rLd9oTBw9rUlek8wZSZj5WZP8pc5p4\nNyoyZA0zDxtC3p1f5nssEh5cSG9YNyeTLkigyiUxAoGAeRUzi6aQVa14Y9SQYRql\nas/sn1Mq2YwzDPcVZE7GoDaYqCrSDpSKBgmdbWoFRm053BqRwzrHr1AZNuPIcgZU\nkKmLAZOKCcnmaG2ON0UFnE9AUu6Bg3Ypx8ez7t9KjZJguBfsMqigQv1fNIHhYjlK\nUuVMbyHenB1Ir9vemJE19y0=\n-----END PRIVATE KEY-----\n",
+  "client_email": "clearancesystem@automatedclearance.iam.gserviceaccount.com",
+  "client_id": "107044386659771288521",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/clearancesystem%40automatedclearance.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

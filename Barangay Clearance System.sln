@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Barangay Clearance System", "Barangay Clearance System.csproj", "{D5FD059A-F043-4C6D-9D3B-50CEFD041EDC}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Automated Barangay Clearance System", "..\Automated Barangay Clearance System\Automated Barangay Clearance System.vdproj", "{4531548E-CD3F-45C5-96D5-2123FCB30512}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D5FD059A-F043-4C6D-9D3B-50CEFD041EDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5FD059A-F043-4C6D-9D3B-50CEFD041EDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5FD059A-F043-4C6D-9D3B-50CEFD041EDC}.Release|Any CPU.ActiveCfg = Release|x64
+		{D5FD059A-F043-4C6D-9D3B-50CEFD041EDC}.Release|Any CPU.Build.0 = Release|x64
+		{4531548E-CD3F-45C5-96D5-2123FCB30512}.Debug|Any CPU.ActiveCfg = Debug
+		{4531548E-CD3F-45C5-96D5-2123FCB30512}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {30AFBB85-1EB7-429D-BC59-217140157015}
+	EndGlobalSection
+EndGlobal
