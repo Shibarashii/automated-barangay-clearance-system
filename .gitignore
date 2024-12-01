@@ -1,0 +1,29 @@
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows Installer files
+*.vs
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# User-specific files
+*-vs2019.user
+*-vs2019.vsconfig
+.vscode/
+
+# Build Results
+/bin/
+/obj/
+
+# Package directories
+/packages/
+
+# Windows Installer files
+*.pdb
+*.bak
+*.swp
