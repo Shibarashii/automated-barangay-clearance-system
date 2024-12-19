@@ -22,9 +22,6 @@
 bin/
 obj/
 
-# Package directories
-packages/
-
 # Windows Installer files
 *.pdb
 *.bak
