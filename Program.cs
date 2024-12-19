@@ -16,7 +16,7 @@ namespace Barangay_Clearance_System
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new AuthForm());
         }
     }
 }

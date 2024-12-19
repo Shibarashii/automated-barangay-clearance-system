@@ -57,22 +57,20 @@ namespace Barangay_Clearance_System.User_Controls
             using (SQLiteConnection connection = new SQLiteConnection(Main.connectionString))
             {
                 connection.Open();
-                string query = $"SELECT * FROM sheet ORDER BY timestamp {sortOrder}";
+                string query = $"SELECT * FROM sheet WHERE is_approved = TRUE ORDER BY timestamp {sortOrder}";
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
                     SQLiteDataReader reader = command.ExecuteReader();
 
                     Dictionary<string, List<object[]>> monthGroups = new Dictionary<string, List<object[]>>();
 
-                    // Group rows by month
                     while (reader.Read())
                     {
                         string rawTimestamp = reader["timestamp"].ToString();
-                        string formattedTimestamp = FormatTimestamp(rawTimestamp);
 
-                        // Parse the timestamp to get the month
                         if (DateTime.TryParse(rawTimestamp, out DateTime dateTime))
                         {
+                            string formattedTimestamp = dateTime.ToString("MMM dd, yyyy HH:mm:ss");
                             string monthKey = dateTime.ToString("MMMM yyyy");
 
                             if (!monthGroups.ContainsKey(monthKey))
@@ -80,31 +78,29 @@ namespace Barangay_Clearance_System.User_Controls
                                 monthGroups[monthKey] = new List<object[]>();
                             }
 
-                            // Add row data to the month group
                             monthGroups[monthKey].Add(new object[]
                             {
-                        formattedTimestamp,
-                        reader["email_address"].ToString(),
-                        reader["name"].ToString(),
-                        reader["purok_number"].ToString(),
-                        reader["house_number"].ToString(),
-                        reader["date_of_birth"].ToString(),
-                        reader["place_of_birth"].ToString(),
-                        reader["sex"].ToString(),
-                        reader["civil_status"].ToString(),
-                        reader["application_purpose"].ToString()
+                            formattedTimestamp,
+                            reader["email_address"].ToString(),
+                            reader["name"].ToString(),
+                            reader["purok_number"].ToString(),
+                            reader["house_number"].ToString(),
+                            reader["date_of_birth"].ToString(),
+                            reader["place_of_birth"].ToString(),
+                            reader["sex"].ToString(),
+                            reader["civil_status"].ToString(),
+                            reader["application_purpose"].ToString()
                             });
                         }
                     }
 
-                    // Sort the month groups by date
-                    var sortedMonthGroups = sortOrder == "DESC"
-                        ? monthGroups.OrderByDescending(kv => DateTime.ParseExact(kv.Key, "MMMM yyyy", null)).ToList()
-                        : monthGroups.OrderBy(kv => DateTime.ParseExact(kv.Key, "MMMM yyyy", null)).ToList();
-
                     // Add grouped data to the DataGridView
-                    foreach (var monthGroup in sortedMonthGroups)
+                    foreach (var monthGroup in monthGroups)
                     {
+                        // Sort rows within the group by timestamp
+                        var sortedRows = sortOrder == "DESC"
+                            ? monthGroup.Value.OrderByDescending(row => DateTime.ParseExact(row[0].ToString(), "MMM dd, yyyy HH:mm:ss", null)).ToList()
+                            : monthGroup.Value.OrderBy(row => DateTime.ParseExact(row[0].ToString(), "MMM dd, yyyy HH:mm:ss", null)).ToList();
 
                         MonthCombobox.Items.Add(monthGroup.Key); // Populate the Month Combobox
 
@@ -114,12 +110,10 @@ namespace Barangay_Clearance_System.User_Controls
                         headerRow.DefaultCellStyle.BackColor = Color.FromArgb(211, 203, 255);
                         headerRow.DefaultCellStyle.ForeColor = Color.FromArgb(71, 69, 94);
                         headerRow.Cells[0].Value = monthGroup.Key; // Set month header (e.g., "November 2024")
-
-                        headerRow.Cells[1].Value = ""; // Clear other columns
                         HistoryGridView.Rows[rowIndex].ReadOnly = true;
 
                         // Add all rows for the current month
-                        foreach (var rowData in monthGroup.Value)
+                        foreach (var rowData in sortedRows)
                         {
                             HistoryGridView.Rows.Add(rowData);
                         }
@@ -130,19 +124,6 @@ namespace Barangay_Clearance_System.User_Controls
             foreach (DataGridViewColumn column in HistoryGridView.Columns)
             {
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
-            }
-        }
-
-        private static string FormatTimestamp(string rawTimestamp)
-        {
-            if (DateTime.TryParse(rawTimestamp, out DateTime dateTime))
-            {
-                return dateTime.ToString("MMM dd, yyyy HH:mm:ss"); 
-            }
-            else
-            {
-                // If parsing fails, return the raw timestamp
-                return rawTimestamp;
             }
         }
 
@@ -192,10 +173,12 @@ namespace Barangay_Clearance_System.User_Controls
             headerRow.Cells[1].Value = ""; // Clear other columns
             HistoryGridView.Rows[rowIndex].ReadOnly = true;
 
+            List<object[]> rows = new List<object[]>(); // Store rows for sorting
+
             using (SQLiteConnection connection = new SQLiteConnection(Main.connectionString))
             {
                 connection.Open();
-                string query = $"SELECT * FROM sheet ORDER BY timestamp {sortOrder}";
+                string query = "SELECT * FROM sheet";
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
                     SQLiteDataReader reader = command.ExecuteReader();
@@ -203,16 +186,16 @@ namespace Barangay_Clearance_System.User_Controls
                     while (reader.Read())
                     {
                         string rawTimestamp = reader["timestamp"].ToString();
-                        string formattedTimestamp = FormatTimestamp(rawTimestamp);
 
                         // Check if the row's timestamp matches the selected month
                         if (DateTime.TryParse(rawTimestamp, out DateTime dateTime))
                         {
+                            string formattedTimestamp = dateTime.ToString("MMM dd, yyyy HH:mm:ss");
                             string monthKey = dateTime.ToString("MMMM yyyy");
                             if (monthKey == selectedMonth)
                             {
-                                // Add matching row to the grid
-                                HistoryGridView.Rows.Add(new object[]
+                                // Add matching row to the list for later sorting
+                                rows.Add(new object[]
                                 {
                             formattedTimestamp,
                             reader["email_address"].ToString(),
@@ -230,7 +213,19 @@ namespace Barangay_Clearance_System.User_Controls
                     }
                 }
             }
+
+            // Sort the rows by timestamp
+            var sortedRows = sortOrder == "DESC"
+                ? rows.OrderByDescending(row => DateTime.ParseExact(row[0].ToString(), "MMM dd, yyyy HH:mm:ss", null)).ToList()
+                : rows.OrderBy(row => DateTime.ParseExact(row[0].ToString(), "MMM dd, yyyy HH:mm:ss", null)).ToList();
+
+            // Add sorted rows to the DataGridView
+            foreach (var rowData in sortedRows)
+            {
+                HistoryGridView.Rows.Add(rowData);
+            }
         }
+
 
         private void MonthCombobox_SelectedIndexChanged(object sender, EventArgs e)
         {

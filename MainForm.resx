@@ -118,10 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="SettingsButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABcAAAAXCAYAAADgKtSgAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
+        DgAACw4BQL7hQQAAARtJREFUSEvdlOERgjAMhRmBERjBEdjAEWQDHYER3EA3kA0YgREcgRHwvZICCS0q
+        6B++u9zRvDakSdtk33Rd18Cm3ETaBgKlfTxFI/J3YGEqnw6MDy6cphV5AL5MPsNgQuGWYtuwDHaGtXQE
+        YKlysRrGeSoxBcQnbAvhXkBglr8gl5AjcNoTMYVbvsKYwJ2OBSoJOQInaxwqC32qWRj73liYwGLdH27a
+        yEUkBfxs4pRSpDiYZLd9FEkBf9nLA4VIcTDpo4zgtzuMZw6RNQ81lc20NT85ZQ7vx7zmcC6dcWpcyEau
+        Oi22hmsJPwMQ/nNDCUS+E/7CsAcsQ+yHbLx/W3yp3j5ea1/F+OWJwUUunKYWeTsIZkszPxE7IkleOkqj
+        nPfQV1AAAAAASUVORK5CYII=
+</value>
+  </data>
   <data name="AboutButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DQAACw0B7QfALAAAAoNJREFUWEftmP1xwjAMxRmBETpCR2CDdgPYoGwAG9AN6AbtBozACIzACPQ9IrlC
+        DAAACwwBP0AiyAAAAoNJREFUWEftmP1xwjAMxRmBETpCR2CDdgPYoGwAG9AN6AbtBozACIzACPQ9IrlC
         xLac5Og//O58V+InWZHlj3T25Inhcrks0D7QvtFOaGc0hb8PaJ9oCzF5DBhwJYO3wID3aC/iZnrgnBnj
         QGNgljficjrgdHd1fw8H1KlkZrXZqe/jiDZNNuGIU+PhwAxiLrIs0DDzX2ge+hgXJBz44JixtXQ3AbsX
         NJ/R4UHCcHN18cfoN4b9HI1Tb6Hf6kzcAANOiyUUHDShgaDzU76TrhgwsFPBaY0Ep1sPbV/lcRZouFAs
@@ -135,7 +146,7 @@
         3+wGFpYAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="HistoryButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="RecordsButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAXCAYAAAARIY8tAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
         DAAACwwBP0AiyAAAAIJJREFUSEtjGAUkg////ytgw1BpygDQoP1AjAucB2IBqFLSAVBzANgY/ABkiQMB
@@ -143,7 +154,7 @@
         ACqLcBfvQEmQRVjrBGIw1JhRQCxgYAAACaOoJ7mTpnIAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="GoogleFormsButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="FormResponsesButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAXCAYAAAARIY8tAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
         DAAACwwBP0AiyAAAAMlJREFUSEtjGAUkg////yvgwAJQJeQBqCH3gRgfiIcqJx0ANSdAzCAI1gPxfDx4

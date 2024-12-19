@@ -105,6 +105,7 @@
             DatabaseGridView.Name = "DatabaseGridView";
             DatabaseGridView.ReadOnly = true;
             DatabaseGridView.RowHeadersVisible = false;
+            DatabaseGridView.RowTemplate.Height = 30;
             DatabaseGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             DatabaseGridView.Size = new System.Drawing.Size(1063, 459);
             DatabaseGridView.TabIndex = 12;
@@ -127,7 +128,7 @@
             DatabaseGridView.ThemeStyle.RowsStyle.BorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             DatabaseGridView.ThemeStyle.RowsStyle.Font = new System.Drawing.Font("Segoe UI", 10.5F);
             DatabaseGridView.ThemeStyle.RowsStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            DatabaseGridView.ThemeStyle.RowsStyle.Height = 22;
+            DatabaseGridView.ThemeStyle.RowsStyle.Height = 30;
             DatabaseGridView.ThemeStyle.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(232)))), ((int)(((byte)(247)))));
             DatabaseGridView.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             // 

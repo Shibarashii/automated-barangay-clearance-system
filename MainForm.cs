@@ -16,15 +16,14 @@ namespace Barangay_Clearance_System
         public static GoogleFormsTab googleFormsTab;
         public static HistoryTab historyTab;
         public static AboutTab aboutTab;
+        public static SettingsTab settingsTab;
 
         public MainForm()
         {
             InitializeComponent();
-
-            if (!File.Exists(Main.databasePath))
-            {
-                GoogleSheets.FetchDataAndInsert();
-            }
+            SettingsTab.GenerateRecoveryCode();
+            
+            FormClosed += (s, args) => Application.Exit(); // Para magclose lahat ng forms pag clinose to
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -62,11 +61,19 @@ namespace Barangay_Clearance_System
             };
             aboutTab.Hide();
             Controls.Add(aboutTab);
+
+            settingsTab = new SettingsTab()
+            {
+                Location = new Point(221, 79),
+                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+            };
+            settingsTab.Hide();
+            Controls.Add(settingsTab);
         }
 
-        private void GoogleFormsButton_CheckedChanged(object sender, EventArgs e)
+        private void RecordsButton_CheckedChanged(object sender, EventArgs e)
         {
-            if (GoogleFormsButton.Checked)
+            if (FormResponsesButton.Checked)
             {
                 googleFormsTab.Show();
                 return;
@@ -86,7 +93,7 @@ namespace Barangay_Clearance_System
 
         private void HistoryButton_CheckedChanged(object sender, EventArgs e)
         {
-            if (HistoryButton.Checked)
+            if (RecordsButton.Checked)
             {
                 historyTab.Show();
                 return;
@@ -102,6 +109,16 @@ namespace Barangay_Clearance_System
                 return;
             }
             aboutTab.Hide();
+        }
+
+        private void SettingsButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SettingsButton.Checked) 
+            {
+                settingsTab.Show();
+                return;
+            }
+            settingsTab.Hide();
         }
     }
 }

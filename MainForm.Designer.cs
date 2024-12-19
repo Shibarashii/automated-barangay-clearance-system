@@ -30,9 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.SidebarColorFill = new System.Windows.Forms.Panel();
-            this.AboutButton = new Guna.UI2.WinForms.Guna2Button();
-            this.HistoryButton = new Guna.UI2.WinForms.Guna2Button();
-            this.GoogleFormsButton = new Guna.UI2.WinForms.Guna2Button();
+            SettingsButton = new Guna.UI2.WinForms.Guna2Button();
+            AboutButton = new Guna.UI2.WinForms.Guna2Button();
+            RecordsButton = new Guna.UI2.WinForms.Guna2Button();
+            FormResponsesButton = new Guna.UI2.WinForms.Guna2Button();
             BarangayClearanceButton = new Guna.UI2.WinForms.Guna2Button();
             this.Logo = new Guna.UI2.WinForms.Guna2CirclePictureBox();
             this.Sidebar = new System.Windows.Forms.Panel();
@@ -48,9 +49,10 @@
             // SidebarColorFill
             // 
             this.SidebarColorFill.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(12)))), ((int)(((byte)(167)))));
-            this.SidebarColorFill.Controls.Add(this.AboutButton);
-            this.SidebarColorFill.Controls.Add(this.HistoryButton);
-            this.SidebarColorFill.Controls.Add(this.GoogleFormsButton);
+            this.SidebarColorFill.Controls.Add(SettingsButton);
+            this.SidebarColorFill.Controls.Add(AboutButton);
+            this.SidebarColorFill.Controls.Add(RecordsButton);
+            this.SidebarColorFill.Controls.Add(FormResponsesButton);
             this.SidebarColorFill.Controls.Add(BarangayClearanceButton);
             this.SidebarColorFill.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SidebarColorFill.Location = new System.Drawing.Point(0, 0);
@@ -58,83 +60,108 @@
             this.SidebarColorFill.Size = new System.Drawing.Size(225, 729);
             this.SidebarColorFill.TabIndex = 0;
             // 
+            // SettingsButton
+            // 
+            SettingsButton.Animated = true;
+            SettingsButton.BorderRadius = 10;
+            SettingsButton.ButtonMode = Guna.UI2.WinForms.Enums.ButtonMode.RadioButton;
+            SettingsButton.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(187)))), ((int)(((byte)(251)))));
+            SettingsButton.CheckedState.Parent = SettingsButton;
+            SettingsButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            SettingsButton.CustomImages.Parent = SettingsButton;
+            SettingsButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(12)))), ((int)(((byte)(167)))));
+            SettingsButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            SettingsButton.ForeColor = System.Drawing.Color.White;
+            SettingsButton.HoverState.Parent = SettingsButton;
+            SettingsButton.Image = ((System.Drawing.Image)(resources.GetObject("SettingsButton.Image")));
+            SettingsButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            SettingsButton.ImageSize = new System.Drawing.Size(25, 25);
+            SettingsButton.Location = new System.Drawing.Point(7, 430);
+            SettingsButton.Name = "SettingsButton";
+            SettingsButton.ShadowDecoration.Parent = SettingsButton;
+            SettingsButton.Size = new System.Drawing.Size(208, 57);
+            SettingsButton.TabIndex = 5;
+            SettingsButton.Text = "Settings";
+            SettingsButton.TextOffset = new System.Drawing.Point(6, 0);
+            SettingsButton.CheckedChanged += new System.EventHandler(SettingsButton_CheckedChanged);
+            // 
             // AboutButton
             // 
-            this.AboutButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.AboutButton.Animated = true;
-            this.AboutButton.BackColor = System.Drawing.Color.Transparent;
-            this.AboutButton.BorderRadius = 10;
-            this.AboutButton.ButtonMode = Guna.UI2.WinForms.Enums.ButtonMode.RadioButton;
-            this.AboutButton.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(187)))), ((int)(((byte)(251)))));
-            this.AboutButton.CheckedState.Parent = this.AboutButton;
-            this.AboutButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.AboutButton.CustomImages.Parent = this.AboutButton;
-            this.AboutButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(12)))), ((int)(((byte)(167)))));
-            this.AboutButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AboutButton.ForeColor = System.Drawing.Color.White;
-            this.AboutButton.HoverState.Parent = this.AboutButton;
-            this.AboutButton.Image = ((System.Drawing.Image)(resources.GetObject("AboutButton.Image")));
-            this.AboutButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.AboutButton.ImageSize = new System.Drawing.Size(30, 30);
-            this.AboutButton.Location = new System.Drawing.Point(7, 653);
-            this.AboutButton.Name = "AboutButton";
-            this.AboutButton.ShadowDecoration.Parent = this.AboutButton;
-            this.AboutButton.Size = new System.Drawing.Size(208, 57);
-            this.AboutButton.TabIndex = 4;
-            this.AboutButton.Text = "About";
-            this.AboutButton.TextOffset = new System.Drawing.Point(6, 0);
-            this.AboutButton.CheckedChanged += new System.EventHandler(this.AboutButton_CheckedChanged);
+            AboutButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            AboutButton.Animated = true;
+            AboutButton.BackColor = System.Drawing.Color.Transparent;
+            AboutButton.BorderRadius = 10;
+            AboutButton.ButtonMode = Guna.UI2.WinForms.Enums.ButtonMode.RadioButton;
+            AboutButton.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(187)))), ((int)(((byte)(251)))));
+            AboutButton.CheckedState.Parent = AboutButton;
+            AboutButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            AboutButton.CustomImages.Parent = AboutButton;
+            AboutButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(12)))), ((int)(((byte)(167)))));
+            AboutButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            AboutButton.ForeColor = System.Drawing.Color.White;
+            AboutButton.HoverState.Parent = AboutButton;
+            AboutButton.Image = ((System.Drawing.Image)(resources.GetObject("AboutButton.Image")));
+            AboutButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            AboutButton.ImageSize = new System.Drawing.Size(30, 30);
+            AboutButton.Location = new System.Drawing.Point(7, 653);
+            AboutButton.Name = "AboutButton";
+            AboutButton.ShadowDecoration.Parent = AboutButton;
+            AboutButton.Size = new System.Drawing.Size(208, 57);
+            AboutButton.TabIndex = 4;
+            AboutButton.Text = "About";
+            AboutButton.TextOffset = new System.Drawing.Point(6, 0);
+            AboutButton.CheckedChanged += new System.EventHandler(AboutButton_CheckedChanged);
             // 
-            // HistoryButton
+            // RecordsButton
             // 
-            this.HistoryButton.Animated = true;
-            this.HistoryButton.BorderRadius = 10;
-            this.HistoryButton.ButtonMode = Guna.UI2.WinForms.Enums.ButtonMode.RadioButton;
-            this.HistoryButton.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(187)))), ((int)(((byte)(251)))));
-            this.HistoryButton.CheckedState.Parent = this.HistoryButton;
-            this.HistoryButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.HistoryButton.CustomImages.Parent = this.HistoryButton;
-            this.HistoryButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(12)))), ((int)(((byte)(167)))));
-            this.HistoryButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HistoryButton.ForeColor = System.Drawing.Color.White;
-            this.HistoryButton.HoverState.Parent = this.HistoryButton;
-            this.HistoryButton.Image = ((System.Drawing.Image)(resources.GetObject("HistoryButton.Image")));
-            this.HistoryButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.HistoryButton.ImageSize = new System.Drawing.Size(25, 25);
-            this.HistoryButton.Location = new System.Drawing.Point(7, 304);
-            this.HistoryButton.Name = "HistoryButton";
-            this.HistoryButton.ShadowDecoration.Parent = this.HistoryButton;
-            this.HistoryButton.Size = new System.Drawing.Size(208, 57);
-            this.HistoryButton.TabIndex = 2;
-            this.HistoryButton.Text = "History";
-            this.HistoryButton.TextOffset = new System.Drawing.Point(6, 0);
-            this.HistoryButton.CheckedChanged += new System.EventHandler(this.HistoryButton_CheckedChanged);
+            RecordsButton.Animated = true;
+            RecordsButton.BorderRadius = 10;
+            RecordsButton.ButtonMode = Guna.UI2.WinForms.Enums.ButtonMode.RadioButton;
+            RecordsButton.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(187)))), ((int)(((byte)(251)))));
+            RecordsButton.CheckedState.Parent = RecordsButton;
+            RecordsButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            RecordsButton.CustomImages.Parent = RecordsButton;
+            RecordsButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(12)))), ((int)(((byte)(167)))));
+            RecordsButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            RecordsButton.ForeColor = System.Drawing.Color.White;
+            RecordsButton.HoverState.Parent = RecordsButton;
+            RecordsButton.Image = ((System.Drawing.Image)(resources.GetObject("RecordsButton.Image")));
+            RecordsButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            RecordsButton.ImageSize = new System.Drawing.Size(25, 25);
+            RecordsButton.Location = new System.Drawing.Point(7, 304);
+            RecordsButton.Name = "RecordsButton";
+            RecordsButton.ShadowDecoration.Parent = RecordsButton;
+            RecordsButton.Size = new System.Drawing.Size(208, 57);
+            RecordsButton.TabIndex = 2;
+            RecordsButton.Text = "Records";
+            RecordsButton.TextOffset = new System.Drawing.Point(6, 0);
+            RecordsButton.CheckedChanged += new System.EventHandler(this.HistoryButton_CheckedChanged);
             // 
-            // GoogleFormsButton
+            // FormResponsesButton
             // 
-            this.GoogleFormsButton.Animated = true;
-            this.GoogleFormsButton.BorderRadius = 10;
-            this.GoogleFormsButton.ButtonMode = Guna.UI2.WinForms.Enums.ButtonMode.RadioButton;
-            this.GoogleFormsButton.Checked = true;
-            this.GoogleFormsButton.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(187)))), ((int)(((byte)(251)))));
-            this.GoogleFormsButton.CheckedState.Parent = this.GoogleFormsButton;
-            this.GoogleFormsButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.GoogleFormsButton.CustomImages.Parent = this.GoogleFormsButton;
-            this.GoogleFormsButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(12)))), ((int)(((byte)(167)))));
-            this.GoogleFormsButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GoogleFormsButton.ForeColor = System.Drawing.Color.White;
-            this.GoogleFormsButton.HoverState.Parent = this.GoogleFormsButton;
-            this.GoogleFormsButton.Image = ((System.Drawing.Image)(resources.GetObject("GoogleFormsButton.Image")));
-            this.GoogleFormsButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.GoogleFormsButton.ImageSize = new System.Drawing.Size(25, 25);
-            this.GoogleFormsButton.Location = new System.Drawing.Point(7, 241);
-            this.GoogleFormsButton.Name = "GoogleFormsButton";
-            this.GoogleFormsButton.ShadowDecoration.Parent = this.GoogleFormsButton;
-            this.GoogleFormsButton.Size = new System.Drawing.Size(208, 57);
-            this.GoogleFormsButton.TabIndex = 1;
-            this.GoogleFormsButton.Text = "Google Forms";
-            this.GoogleFormsButton.TextOffset = new System.Drawing.Point(6, 0);
-            this.GoogleFormsButton.CheckedChanged += new System.EventHandler(this.GoogleFormsButton_CheckedChanged);
+            FormResponsesButton.Animated = true;
+            FormResponsesButton.BorderRadius = 10;
+            FormResponsesButton.ButtonMode = Guna.UI2.WinForms.Enums.ButtonMode.RadioButton;
+            FormResponsesButton.Checked = true;
+            FormResponsesButton.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(187)))), ((int)(((byte)(251)))));
+            FormResponsesButton.CheckedState.Parent = FormResponsesButton;
+            FormResponsesButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            FormResponsesButton.CustomImages.Parent = FormResponsesButton;
+            FormResponsesButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(12)))), ((int)(((byte)(167)))));
+            FormResponsesButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            FormResponsesButton.ForeColor = System.Drawing.Color.White;
+            FormResponsesButton.HoverState.Parent = FormResponsesButton;
+            FormResponsesButton.Image = ((System.Drawing.Image)(resources.GetObject("FormResponsesButton.Image")));
+            FormResponsesButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            FormResponsesButton.ImageSize = new System.Drawing.Size(25, 25);
+            FormResponsesButton.Location = new System.Drawing.Point(7, 241);
+            FormResponsesButton.Name = "FormResponsesButton";
+            FormResponsesButton.ShadowDecoration.Parent = FormResponsesButton;
+            FormResponsesButton.Size = new System.Drawing.Size(208, 57);
+            FormResponsesButton.TabIndex = 1;
+            FormResponsesButton.Text = "Form Responses";
+            FormResponsesButton.TextOffset = new System.Drawing.Point(6, 0);
+            FormResponsesButton.CheckedChanged += new System.EventHandler(RecordsButton_CheckedChanged);
             // 
             // BarangayClearanceButton
             // 
@@ -157,7 +184,7 @@
             BarangayClearanceButton.ShadowDecoration.Parent = BarangayClearanceButton;
             BarangayClearanceButton.Size = new System.Drawing.Size(208, 57);
             BarangayClearanceButton.TabIndex = 0;
-            BarangayClearanceButton.Text = "Barangay Clearance";
+            BarangayClearanceButton.Text = "Document";
             BarangayClearanceButton.TextOffset = new System.Drawing.Point(6, 0);
             BarangayClearanceButton.CheckedChanged += new System.EventHandler(BarangayClearanceButton_CheckedChanged);
             // 
@@ -256,10 +283,11 @@
         private System.Windows.Forms.Panel Sidebar;
         private System.Windows.Forms.PictureBox DocumentIcon;
         private System.Windows.Forms.Label TitleLabel;
-        public Guna.UI2.WinForms.Guna2Button GoogleFormsButton;
-        public Guna.UI2.WinForms.Guna2Button HistoryButton;
-        public Guna.UI2.WinForms.Guna2Button AboutButton;
         private Guna.UI2.WinForms.Guna2Panel LinePanel;
+        public static Guna.UI2.WinForms.Guna2Button FormResponsesButton;
+        public static Guna.UI2.WinForms.Guna2Button RecordsButton;
+        public static Guna.UI2.WinForms.Guna2Button AboutButton;
+        public static Guna.UI2.WinForms.Guna2Button SettingsButton;
         public static Guna.UI2.WinForms.Guna2Button BarangayClearanceButton;
     }
 }

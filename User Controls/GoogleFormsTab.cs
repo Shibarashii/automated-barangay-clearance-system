@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,6 +13,8 @@ namespace Barangay_Clearance_System.User_Controls
 {
     public partial class GoogleFormsTab : UserControl
     {
+        private static string rawTimeStamp;
+
         public GoogleFormsTab()
         {
             InitializeComponent();
@@ -26,6 +29,7 @@ namespace Barangay_Clearance_System.User_Controls
             DatabaseGridView.ReadOnly = true;
             DatabaseGridView.MultiSelect = false;
         }
+
 
         public static void PopulateGridView()
         {
@@ -43,14 +47,25 @@ namespace Barangay_Clearance_System.User_Controls
             DatabaseGridView.Columns.Add("civil_status", "Civil Status");
             DatabaseGridView.Columns.Add("application_purpose", "Application Purpose");
 
-            DataGridViewButtonColumn selectButtonColumn = new DataGridViewButtonColumn()
+            // Approve Button Column
+            DataGridViewButtonColumn approveButtonColumn = new DataGridViewButtonColumn()
             {
-                Name = "select_button",
-                HeaderText = "Actions",
-                Text = "Select",
+                Name = "approve_button",
+                HeaderText = "Approve",
+                Text = "Approve",
+                UseColumnTextForButtonValue = true
+            };
+            DatabaseGridView.Columns.Add(approveButtonColumn);
+
+            // Remove Button Column
+            DataGridViewButtonColumn removeButtonColumn = new DataGridViewButtonColumn()
+            {
+                Name = "remove_button",
+                HeaderText = "Remove",
+                Text = "Remove",
                 UseColumnTextForButtonValue = true,
             };
-            DatabaseGridView.Columns.Add(selectButtonColumn);
+            DatabaseGridView.Columns.Add(removeButtonColumn);
 
             // Adjust width
             DatabaseGridView.Columns["name"].Width = 150;
@@ -61,22 +76,25 @@ namespace Barangay_Clearance_System.User_Controls
             DatabaseGridView.Columns["sex"].Width = 75;
             DatabaseGridView.Columns["civil_status"].Width = 75;
             DatabaseGridView.Columns["application_purpose"].Width = 125;
-            DatabaseGridView.Columns["select_button"].Width = 75;
+            DatabaseGridView.Columns["approve_button"].Width = 75;
+            DatabaseGridView.Columns["remove_button"].Width = 75;
 
             using (SQLiteConnection connection = new SQLiteConnection(Main.connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM sheet";
+                string query = "SELECT * FROM sheet WHERE is_archived = FALSE";
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
                     SQLiteDataReader reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        DateTime timestamp = DateTime.Parse(reader["timestamp"].ToString());
+                        rawTimeStamp = reader["timestamp"].ToString();
+                        string timestamp = DateTime.Parse(rawTimeStamp).ToString("MM-dd-yyyy HH:mm:ss");
 
-                        DatabaseGridView.Rows.Add(
-                            timestamp.ToString("yyyy-MM-dd HH:mm:ss"), // Format date as string
+                        // Add row with timestamp
+                        var rowIndex = DatabaseGridView.Rows.Add(
+                            timestamp,
                             reader["email_address"].ToString(),
                             reader["name"].ToString(),
                             reader["purok_number"].ToString(),
@@ -87,10 +105,16 @@ namespace Barangay_Clearance_System.User_Controls
                             reader["civil_status"].ToString(),
                             reader["application_purpose"].ToString()
                         );
+
+                        // Store rawTimeStamp in the row (hidden or as a tag for internal use)
+                        DatabaseGridView.Rows[rowIndex].Tag = rawTimeStamp;  // Use Tag to store the rawTimeStamp
                     }
                 }
             }
+
+            DatabaseGridView.Sort(DatabaseGridView.Columns[0], System.ComponentModel.ListSortDirection.Descending);
         }
+
 
 
         private void Search()
@@ -114,7 +138,8 @@ namespace Barangay_Clearance_System.User_Controls
                      LOWER(date_of_birth) LIKE @search OR 
                      LOWER(place_of_birth) LIKE @search OR 
                      LOWER(civil_status) LIKE @search OR 
-                     LOWER(application_purpose) LIKE @search";
+                     LOWER(application_purpose) LIKE @search AND
+                     is_archived = FALSE";
 
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
@@ -136,6 +161,7 @@ namespace Barangay_Clearance_System.User_Controls
                             reader["civil_status"].ToString(),
                             reader["application_purpose"].ToString()
                         );
+
                     }
                 }
             }
@@ -143,41 +169,87 @@ namespace Barangay_Clearance_System.User_Controls
 
         private void ImportButton_Click(object sender, EventArgs e)
         {
-            GoogleSheets.FetchDataAndInsert();
-            HistoryTab.PopulateGridView();
-            PopulateGridView();
+            try
+            {
+                // Check if the JSON file exists
+                if (!File.Exists(Main.JSONFilePath))
+                {
+                    MessageBox.Show("No JSON file found. Please upload a service account JSON file first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                GoogleSheets.FetchDataAndInsert();
+                HistoryTab.PopulateGridView();
+                PopulateGridView();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
         }
 
         private void DatabaseGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Check if the clicked cell is in the Edit Button column
             if (e.RowIndex >= 0 && DatabaseGridView.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
             {
-                string timestamp = DatabaseGridView.Rows[e.RowIndex].Cells["timestamp"].Value?.ToString();
+                string rawTimeStamp = DatabaseGridView.Rows[e.RowIndex].Tag?.ToString();
 
-                // Do nothing if the row's "timestamp" field (or any key field) is empty
-                if (string.IsNullOrWhiteSpace(timestamp))
+                if (string.IsNullOrWhiteSpace(rawTimeStamp))
                 {
                     return;
                 }
 
-                string email = DatabaseGridView.Rows[e.RowIndex].Cells["email_address"].Value.ToString();
-                string name = DatabaseGridView.Rows[e.RowIndex].Cells["name"].Value.ToString();
-                string purokNumber = DatabaseGridView.Rows[e.RowIndex].Cells["purok_number"].Value.ToString();
-                string houseNumber = DatabaseGridView.Rows[e.RowIndex].Cells["house_number"].Value.ToString();
-                string dateOfBirth = DatabaseGridView.Rows[e.RowIndex].Cells["date_of_birth"].Value.ToString();
-                string placeOfBirth = DatabaseGridView.Rows[e.RowIndex].Cells["place_of_birth"].Value.ToString();
-                string sex = DatabaseGridView.Rows[e.RowIndex].Cells["sex"].Value.ToString();
-                string civilStatus = DatabaseGridView.Rows[e.RowIndex].Cells["civil_status"].Value.ToString();
-                string applicationPurpose = DatabaseGridView.Rows[e.RowIndex].Cells["application_purpose"].Value.ToString();
+                // APPROVE BUTTON
+                if (DatabaseGridView.Columns[e.ColumnIndex].Name == "approve_button")
+                {
+                    var confirmResult = MessageBox.Show(
+                        "Are you sure you want to approve this entry?",
+                        "Confirm Approval",
+                        MessageBoxButtons.OKCancel,
+                        MessageBoxIcon.Question
+                    );
 
+                    if (confirmResult == DialogResult.OK)
+                    {
+                        string email = DatabaseGridView.Rows[e.RowIndex].Cells["email_address"].Value.ToString();
+                        string name = DatabaseGridView.Rows[e.RowIndex].Cells["name"].Value.ToString();
+                        string purokNumber = DatabaseGridView.Rows[e.RowIndex].Cells["purok_number"].Value.ToString();
+                        string houseNumber = DatabaseGridView.Rows[e.RowIndex].Cells["house_number"].Value.ToString();
+                        string dateOfBirth = DatabaseGridView.Rows[e.RowIndex].Cells["date_of_birth"].Value.ToString();
+                        string placeOfBirth = DatabaseGridView.Rows[e.RowIndex].Cells["place_of_birth"].Value.ToString();
+                        string sex = DatabaseGridView.Rows[e.RowIndex].Cells["sex"].Value.ToString();
+                        string civilStatus = DatabaseGridView.Rows[e.RowIndex].Cells["civil_status"].Value.ToString();
+                        string applicationPurpose = DatabaseGridView.Rows[e.RowIndex].Cells["application_purpose"].Value.ToString();
 
-                // Switch to clearanceTab
-                MainForm.googleFormsTab.Hide();
-                MainForm.clearanceTab.Show();
-                MainForm.BarangayClearanceButton.Checked = true;
+                        MainForm.googleFormsTab.Hide();
+                        MainForm.clearanceTab.Show();
+                        MainForm.BarangayClearanceButton.Checked = true;
+                        ClearanceTab.PopulateForms(rawTimeStamp, email, name, purokNumber, houseNumber, dateOfBirth, placeOfBirth, sex, civilStatus, applicationPurpose);
+                    }
+                }
 
-                ClearanceTab.PopulateForms(timestamp, email, name, purokNumber, houseNumber, dateOfBirth, placeOfBirth, sex, civilStatus, applicationPurpose);
+                // REMOVE BUTTON
+                if (DatabaseGridView.Columns[e.ColumnIndex].Name == "remove_button")
+                {
+                    var confirmResult = MessageBox.Show(
+                        "Are you sure you want to remove this entry?",
+                        "Confirm Removal",
+                        MessageBoxButtons.OKCancel,
+                        MessageBoxIcon.Warning
+
+                    );
+
+                    if (confirmResult == DialogResult.OK)
+                    {
+                        GoogleSheets.DeleteEntry(rawTimeStamp);
+                        GoogleSheets.FetchDataAndInsert();
+                        PopulateGridView();
+                        ClearanceTab.ClearResources(rawTimeStamp);
+                        HistoryTab.PopulateGridView();
+                    }
+                }
             }
         }
 

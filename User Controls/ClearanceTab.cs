@@ -1,13 +1,18 @@
 ﻿using CefSharp;
 using CefSharp.WinForms;
+using Google.Protobuf.WellKnownTypes;
 using Org.BouncyCastle.Bcpg;
+using Org.BouncyCastle.Utilities.Encoders;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using System.Xml.Linq;
 using Word = Microsoft.Office.Interop.Word;
 
 namespace Barangay_Clearance_System.User_Controls
@@ -16,11 +21,13 @@ namespace Barangay_Clearance_System.User_Controls
     {
         private static string savedPdfFilePath = null;
         private static string tempFilePath;
+
+        public static string rawTimeStamp;
         public ClearanceTab()
         {
             InitializeComponent();
 
-            // Initialize the embedded template
+            // embedded template
             tempFilePath = ExtractEmbeddedFile("Barangay_Clearance_System.Resources.barangay-clearance-template.docx");
 
             NameTextbox.ReadOnly = true;
@@ -41,10 +48,8 @@ namespace Barangay_Clearance_System.User_Controls
         {
             try
             {
-                // Define the temporary file path
                 string tempPath = Path.Combine(Path.GetTempPath(), "barangay-clearance-template.docx");
 
-                // Use the resource name to access the embedded file
                 using (Stream resourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
                 {
                     if (resourceStream == null)
@@ -67,6 +72,7 @@ namespace Barangay_Clearance_System.User_Controls
 
         public static void PopulateForms(string timestamp, string email, string name, string purokNumber, string houseNumber, string dateOfBirth, string placeOfBirth, string sex, string civilStatus, string applicationPurpose)
         {
+            rawTimeStamp = timestamp;
             DateTime parsedDate = DateTime.Parse(dateOfBirth);
 
             NameTextbox.Text = name;
@@ -104,32 +110,28 @@ namespace Barangay_Clearance_System.User_Controls
 
         private static async void LoadPreview()
         {
-            // Check if essential fields are empty, return early to avoid unnecessary processing
             if (string.IsNullOrEmpty(NameTextbox.Text))
                 return;
 
-            // Parse the Date of Birth from the TextBox
             ParseDate(DateOfBirthTextbox.Text, out string month, out string day, out string year);
 
-            // Create replacements for placeholders in the Word document
             var replacements = new Dictionary<string, string>
-    {
-        { "FullName", NameTextbox.Text },
-        { "Purok", PurokNoTextbox.Text },
-        { "House", HouseNoTextbox.Text },
-        { "Month", month },
-        { "Day", day },
-        { "Year", year },
-        { "MG", "" },
-        { "FG", "" },
-        { "CivilStatus", CivilStatusTextbox.Text },
-        { "BirthPlace", PlaceOfBirthTextbox.Text },
-        { "P1", "" }, { "P2", "" }, { "P3", "" }, { "P4", "" },
-        { "P5", "" }, { "P6", "" }, { "P7", "" }, { "P8", "" },
-        { "P9", "" }, { "P10", "" }, { "P11", "" }
-    };
+            {
+                { "FullName", NameTextbox.Text },
+                { "Purok", PurokNoTextbox.Text },
+                { "House", HouseNoTextbox.Text },
+                { "Month", month },
+                { "Day", day },
+                { "Year", year },
+                { "MG", "" },
+                { "FG", "" },
+                { "CivilStatus", CivilStatusTextbox.Text },
+                { "BirthPlace", PlaceOfBirthTextbox.Text },
+                { "P1", "" }, { "P2", "" }, { "P3", "" }, { "P4", "" },
+                { "P5", "" }, { "P6", "" }, { "P7", "" }, { "P8", "" },
+                { "P9", "" }, { "P10", "" }, { "P11", "" }
+            };
 
-            // Update the Sex checkbox
             if (SexTextbox.Text == "Male")
             {
                 replacements["MG"] = "✔";
@@ -139,7 +141,6 @@ namespace Barangay_Clearance_System.User_Controls
                 replacements["FG"] = "✔";
             }
 
-            // Update the Application Purpose field
             switch (ApplicationPurposeTextbox.Text)
             {
                 case "Local Employment": replacements["P1"] = "✔"; break;
@@ -157,23 +158,35 @@ namespace Barangay_Clearance_System.User_Controls
                     break;
             }
 
-            // Perform the heavy lifting asynchronously
             await Task.Run(() => ReplaceText(tempFilePath, replacements));
         }
 
+        public static void ClearResources(string timestamp)
+        {
+            if (rawTimeStamp == timestamp)
+            {
+                NameTextbox.Text = "";
+                PurokNoTextbox.Text = "";
+                HouseNoTextbox.Text = "";
+                DateOfBirthTextbox.Text = "";
+                PlaceOfBirthTextbox.Text = "";
+                SexTextbox.Text = "";
+                CivilStatusTextbox.Text = "";
+                ApplicationPurposeTextbox.Text = "";
+                SpecifyTextbox.Text = "";
+                ChromiumWebBrowserPreview = null;
+            }
+        }
 
         private static void ReplaceText(string path, Dictionary<string, string> replacements)
         {
-            // Start Word application to open and modify the document
             Word.Application wordApp = new Word.Application();
             Word.Document document = null;
 
             try
             {
-                // Open the document (ensure the path is correct)
                 document = wordApp.Documents.Open(path, ReadOnly: false);
 
-                // Loop through each shape in the document (like TextBoxes, etc.)
                 foreach (Word.Shape shape in document.Shapes)
                 {
                     if (shape.TextFrame.HasText == -1) // Check if the shape contains text
@@ -181,7 +194,6 @@ namespace Barangay_Clearance_System.User_Controls
                         Word.TextFrame textFrame = shape.TextFrame;
                         string text = textFrame.TextRange.Text;
 
-                        // Replace placeholders with actual values
                         foreach (var pair in replacements)
                         {
                             if (text.Contains(pair.Key))
@@ -192,21 +204,17 @@ namespace Barangay_Clearance_System.User_Controls
                     }
                 }
 
-                // Save the modified document as a PDF
                 savedPdfFilePath = Path.GetTempPath() + Guid.NewGuid().ToString() + ".pdf";
                 document.SaveAs2(savedPdfFilePath, Word.WdSaveFormat.wdFormatPDF);
 
-                // After saving, load the PDF into the preview browser
                 LoadPdfPreview(savedPdfFilePath);
             }
             catch (Exception ex)
             {
-                // Handle errors during document processing
                 MessageBox.Show($"Error processing document: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
-                // Clean up Word application and close document
                 document?.Close(false);
                 wordApp.Quit(false);
             }
@@ -214,10 +222,8 @@ namespace Barangay_Clearance_System.User_Controls
 
         private static void LoadPdfPreview(string pdfPath)
         {
-            // Ensure that the ChromiumWebBrowser control is correctly initialized
             if (ChromiumWebBrowserPreview != null && !string.IsNullOrEmpty(pdfPath))
             {
-                // Load the generated PDF into the preview browser
                 ChromiumWebBrowserPreview.Load(pdfPath);
             }
             else
@@ -232,11 +238,9 @@ namespace Barangay_Clearance_System.User_Controls
 
             try
             {
-                // Specify the format "MMMM dd, yyyy"
                 DateTime parsedDate = DateTime.ParseExact(dateInput, "MMMM dd, yyyy",
                                                           System.Globalization.CultureInfo.InvariantCulture);
 
-                // Extract components
                 month = parsedDate.ToString("MMMM"); // January
                 day = parsedDate.Day.ToString();     // 05
                 year = parsedDate.Year.ToString();   // 2003
@@ -250,14 +254,13 @@ namespace Barangay_Clearance_System.User_Controls
 
         private void Textboxes_TextChanged(object sender, EventArgs e)
         {
-            // Enable or disable buttons based on the NameTextbox
             SaveAsPDFButton.Enabled = !string.IsNullOrEmpty(NameTextbox.Text);
             PrintButton.Enabled = !string.IsNullOrEmpty(NameTextbox.Text);
         }
 
         private void SaveAsPDFButton_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(savedPdfFilePath) || !System.IO.File.Exists(savedPdfFilePath))
+            if (string.IsNullOrEmpty(savedPdfFilePath) || !File.Exists(savedPdfFilePath))
             {
                 MessageBox.Show("No previewed file to save. Please load a preview first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -274,9 +277,9 @@ namespace Barangay_Clearance_System.User_Controls
             {
                 try
                 {
-                    // Copy the temporary file to the selected location
-                    System.IO.File.Copy(savedPdfFilePath, saveFileDialog.FileName, true);
+                    File.Copy(savedPdfFilePath, saveFileDialog.FileName, true);
                     MessageBox.Show($"File saved successfully to: {saveFileDialog.FileName}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    SetApprovedToTrue();
                 }
                 catch (Exception ex)
                 {
@@ -318,10 +321,32 @@ namespace Barangay_Clearance_System.User_Controls
                         }
 
                         MessageBox.Show("PDF sent to printer.", "Print Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        SetApprovedToTrue();
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show($"Error printing PDF: {ex.Message}", "Print Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void SetApprovedToTrue()
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(Main.connectionString))
+            {
+                connection.Open();
+                string query = "UPDATE sheet SET is_approved = TRUE WHERE timestamp = @timestamp";
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("timestamp", rawTimeStamp);
+
+                    int count = command.ExecuteNonQuery();
+
+                    if (count > 0)
+                    {
+                        HistoryTab.PopulateGridView();
+                        MessageBox.Show("Submission is approved and recorded.", "Approved", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }

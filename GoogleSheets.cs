@@ -8,29 +8,66 @@ using Google.Apis.Services;
 using System.Linq;
 using System.Windows.Forms;
 using Barangay_Clearance_System.User_Controls;
+using Google.Apis.Sheets.v4.Data;
+using System.Collections.Generic;
 
 namespace Barangay_Clearance_System
 {
     public class GoogleSheets
     {
-        private static readonly string[] scopes = { SheetsService.Scope.SpreadsheetsReadonly };
+        private static readonly string[] scopes = { SheetsService.Scope.Spreadsheets };
         private static readonly string applicationName = "BarangayClearance";
         private static readonly string spreadSheetID = "1ONH2Kxfurs0xAw62E8rLBIdCN6EqCy37z34y3qQCerk";
         private static readonly string range = "Form Responses 1!A2:J";
 
         public static void FetchDataAndInsert()
         {
+            // Authenticate with the Google Sheets API using the provided JSON file
+            var credential = GoogleCredential.FromFile(Main.JSONFilePath).CreateScoped(scopes);
+
+            // Create the Sheets API service
+            var service = new SheetsService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = applicationName,
+            });
+
+            var request = service.Spreadsheets.Values.Get(spreadSheetID, range);
+            var response = request.Execute();
+            var values = response.Values;
+
+            if (values != null && values.Count > 0)
+            {
+                Main.UpdateRecords();
+
+                foreach (var row in values)
+                {
+                    string timestamp = row.ElementAtOrDefault(0)?.ToString() ?? string.Empty;
+                    string emailAddress = row.ElementAtOrDefault(1)?.ToString() ?? string.Empty;
+                    string name = row.ElementAtOrDefault(2)?.ToString() ?? string.Empty;
+                    string purokNumber = row.ElementAtOrDefault(3)?.ToString() ?? string.Empty;
+                    string houseNumber = row.ElementAtOrDefault(4)?.ToString() ?? string.Empty;
+                    string dateOfBirth = row.ElementAtOrDefault(5)?.ToString() ?? string.Empty;
+                    string placeOfBirth = row.ElementAtOrDefault(6)?.ToString() ?? string.Empty;
+                    string sex = row.ElementAtOrDefault(7)?.ToString() ?? string.Empty;
+                    string civilStatus = row.ElementAtOrDefault(8)?.ToString() ?? string.Empty;
+                    string applicationPurpose = row.ElementAtOrDefault(9)?.ToString() ?? string.Empty;
+
+                    InsertIntoDatabase(timestamp, emailAddress, name, purokNumber, houseNumber, dateOfBirth, placeOfBirth, sex, civilStatus, applicationPurpose);
+                }
+                MessageBox.Show("Local Database Synced to Google Forms.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("No data found.", "No Data Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public static void DeleteEntry(string timestamp)
+        {
             try
             {
-                // Retrieve the embedded JSON content
-                string jsonContent = GetEmbeddedJson();
-
-                // Save it to a temporary file
-                string tempPath = Path.Combine(Path.GetTempPath(), "service-account.json");
-                File.WriteAllText(tempPath, jsonContent);
-
-                // Authenticate with the Google Sheets API using the temporary JSON file
-                var credential = GoogleCredential.FromFile(tempPath).CreateScoped(scopes);
+                var credential = GoogleCredential.FromFile(Main.JSONFilePath).CreateScoped(scopes);
 
                 // Create the Sheets API service
                 var service = new SheetsService(new BaseClientService.Initializer()
@@ -39,82 +76,74 @@ namespace Barangay_Clearance_System
                     ApplicationName = applicationName,
                 });
 
+                // Fetch the metadata to get the SheetId of the first sheet
+                var spreadsheet = service.Spreadsheets.Get(spreadSheetID).Execute();
+                var sheetId = spreadsheet.Sheets[0].Properties.SheetId;  // Getting SheetId of the first sheet
+
+                // Fetch the current data
                 var request = service.Spreadsheets.Values.Get(spreadSheetID, range);
                 var response = request.Execute();
                 var values = response.Values;
 
-                if (values != null && values.Count > 0)
+                // Find the row to delete by comparing timestamp
+                int rowIndex = -1;
+                for (int i = 0; i < values.Count; i++)
                 {
-                    InitializeDatabase();
-
-                    foreach (var row in values)
+                    if (values[i][0].ToString() == timestamp)
                     {
-                        string timestamp = row.ElementAtOrDefault(0)?.ToString() ?? string.Empty;
-                        string emailAddress = row.ElementAtOrDefault(1)?.ToString() ?? string.Empty;
-                        string name = row.ElementAtOrDefault(2)?.ToString() ?? string.Empty;
-                        string purokNumber = row.ElementAtOrDefault(3)?.ToString() ?? string.Empty;
-                        string houseNumber = row.ElementAtOrDefault(4)?.ToString() ?? string.Empty;
-                        string dateOfBirth = row.ElementAtOrDefault(5)?.ToString() ?? string.Empty;
-                        string placeOfBirth = row.ElementAtOrDefault(6)?.ToString() ?? string.Empty;
-                        string sex = row.ElementAtOrDefault(7)?.ToString() ?? string.Empty;
-                        string civilStatus = row.ElementAtOrDefault(8)?.ToString() ?? string.Empty;
-                        string applicationPurpose = row.ElementAtOrDefault(9)?.ToString() ?? string.Empty;
-
-                        InsertIntoDatabase(timestamp, emailAddress, name, purokNumber, houseNumber, dateOfBirth, placeOfBirth, sex, civilStatus, applicationPurpose);
+                        rowIndex = i + 1;
+                        break;
                     }
                 }
+
+                if (rowIndex != -1)
+                {
+                    var deleteRequest = service.Spreadsheets.BatchUpdate(new BatchUpdateSpreadsheetRequest()
+                    {
+                        Requests = new List<Request>
+                        {
+                            new Request
+                            {
+                                DeleteDimension = new DeleteDimensionRequest
+                                {
+                                    Range = new DimensionRange
+                                    {
+                                        SheetId = sheetId,  // Using dynamic SheetId
+                                        Dimension = "ROWS", // Deleting rows
+                                        StartIndex = rowIndex, // Corrected: subtract 1 for 0-based index
+                                        EndIndex = rowIndex + 1    // EndIndex is exclusive, so this is fine
+                                    }
+                                }
+                            }
+                        }
+                    }, spreadSheetID);
+
+                    // Execute the request
+                    deleteRequest.Execute();
+                    MessageBox.Show("Entry deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
                 else
                 {
-                    MessageBox.Show("No data found.", "No Data Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}. Check your internet connection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        private static void InitializeDatabase()
-        {
-            try
-            {
-                if (File.Exists(Main.databasePath))
-                {
-                    File.Delete(Main.databasePath); // Delete the database file
+                    MessageBox.Show("Entry not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-                // Create a new database file
-                SQLiteConnection.CreateFile(Main.databasePath);
-                MessageBox.Show("Local database synced to Google Sheets.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                // Delete entry from local database
                 using (SQLiteConnection connection = new SQLiteConnection(Main.connectionString))
                 {
                     connection.Open();
-                    string createTableQuery = @"
-                CREATE TABLE IF NOT EXISTS sheet (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    timestamp TEXT UNIQUE NOT NULL,
-                    email_address TEXT NOT NULL,
-                    name TEXT NOT NULL,
-                    purok_number TEXT NOT NULL,
-                    house_number TEXT,
-                    date_of_birth TEXT NOT NULL,
-                    place_of_birth TEXT NOT NULL,
-                    sex TEXT NOT NULL,
-                    civil_status TEXT NOT NULL,
-                    application_purpose TEXT NOT NULL
-                );";
-                    using (SQLiteCommand command = new SQLiteCommand(createTableQuery, connection))
+                    string deleteQuery = "DELETE FROM sheet WHERE timestamp = @timestamp;";
+                    using (SQLiteCommand command = new SQLiteCommand(deleteQuery, connection))
                     {
-                        command.ExecuteNonQuery();
+                        command.Parameters.AddWithValue("@timestamp", timestamp);
+                        int rowsAffected = command.ExecuteNonQuery();
                     }
-                    connection.Close();
                 }
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error initializing database: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -135,7 +164,6 @@ namespace Barangay_Clearance_System
         {
             try
             {
-
                 using (SQLiteConnection connection = new SQLiteConnection(Main.connectionString))
                 {
                     connection.Open();
