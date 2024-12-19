@@ -148,18 +148,6 @@ namespace Barangay_Clearance_System
         }
 
 
-        private static string GetEmbeddedJson()
-        {
-            string resourceName = "Barangay_Clearance_System.Resources.key.json";
-            var assembly = Assembly.GetExecutingAssembly();
-
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
-        }
-
         private static void InsertIntoDatabase(string timestamp, string emailAddress, string name, string purokNumber, string houseNumber, string dateOfBirth, string placeOfBirth, string sex, string civilStatus, string applicationPurpose)
         {
             try
