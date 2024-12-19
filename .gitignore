@@ -14,16 +14,21 @@
 # User-specific files
 *-vs2019.user
 *-vs2019.vsconfig
-.vscode/
+*.user
+*.suo
+.vs/
 
 # Build Results
-/bin/
-/obj/
+bin/
+obj/
 
 # Package directories
-/packages/
+packages/
 
 # Windows Installer files
 *.pdb
 *.bak
 *.swp
+
+# Log files
+*.log
