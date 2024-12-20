@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Barangay_Clearance_System.Forms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SQLite;
@@ -147,13 +148,9 @@ namespace Barangay_Clearance_System.User_Controls
             }
         }
 
+
         private void ChangeJSONFileButton_Click(object sender, EventArgs e)
         {
-            UploadJSONFile();
-        }
-
-        public static void UploadJSONFile()
-        {
             try
             {
                 // Open a file dialog to select the JSON file
@@ -177,29 +174,10 @@ namespace Barangay_Clearance_System.User_Controls
             }
         }
 
-        private void ChangeJSONFileButton_Click_1(object sender, EventArgs e)
+        private void SpreadsheetConfigButton_Click(object sender, EventArgs e)
         {
-            try
-            {
-                // Open a file dialog to select the JSON file
-                OpenFileDialog openFileDialog = new OpenFileDialog
-                {
-                    Filter = "JSON Files (*.json)|*.json",
-                    Title = "Select a Service Account JSON File"
-                };
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    // Copy the file to the AppData directory
-                    File.Copy(openFileDialog.FileName, Main.JSONFilePath, true);
-
-                    MessageBox.Show("JSON file uploaded successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred while uploading the file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            SpreadsheetConfigForm spreadsheetConfigForm = new SpreadsheetConfigForm();
+            spreadsheetConfigForm.ShowDialog();
         }
     }
 }

@@ -18,16 +18,22 @@ namespace Barangay_Clearance_System.User_Controls
         public GoogleFormsTab()
         {
             InitializeComponent();
-
-            if (File.Exists(Main.databasePath))
+            try
             {
-                PopulateGridView();
-            }
+                if (File.Exists(Main.databasePath))
+                {
+                    PopulateGridView();
+                }
 
-            DatabaseGridView.CellContentClick += DatabaseGridView_CellContentClick;
-            DatabaseGridView.AllowUserToResizeRows = false;
-            DatabaseGridView.ReadOnly = true;
-            DatabaseGridView.MultiSelect = false;
+                DatabaseGridView.CellContentClick += DatabaseGridView_CellContentClick;
+                DatabaseGridView.AllowUserToResizeRows = false;
+                DatabaseGridView.ReadOnly = true;
+                DatabaseGridView.MultiSelect = false;
+            }
+            catch
+            {
+                MessageBox.Show("Error loading the spreadsheet. Please check the spreadsheet ID and range in the settings for accuracy.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
@@ -37,7 +43,7 @@ namespace Barangay_Clearance_System.User_Controls
             DatabaseGridView.Rows.Clear();
 
             DatabaseGridView.Columns.Add("timestamp", "Date");
-            DatabaseGridView.Columns.Add("email_address", "Email Address");
+            DatabaseGridView.Columns.Add("email_address", "Contact Information");
             DatabaseGridView.Columns.Add("name", "Name");
             DatabaseGridView.Columns.Add("purok_number", "Purok Number");
             DatabaseGridView.Columns.Add("house_number", "House Number");

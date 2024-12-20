@@ -35,6 +35,7 @@
             this.ChangePasswordButton = new Guna.UI2.WinForms.Guna2Button();
             this.ChangeJSONFileButton = new Guna.UI2.WinForms.Guna2Button();
             this.RecoveryButton = new Guna.UI2.WinForms.Guna2Button();
+            this.SpreadsheetConfigButton = new Guna.UI2.WinForms.Guna2Button();
             ((System.ComponentModel.ISupportInitialize)(this.InfoIcon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -134,16 +135,16 @@
             this.ChangeJSONFileButton.Image = ((System.Drawing.Image)(resources.GetObject("ChangeJSONFileButton.Image")));
             this.ChangeJSONFileButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.ChangeJSONFileButton.ImageSize = new System.Drawing.Size(30, 30);
-            this.ChangeJSONFileButton.Location = new System.Drawing.Point(44, 242);
+            this.ChangeJSONFileButton.Location = new System.Drawing.Point(44, 299);
             this.ChangeJSONFileButton.Name = "ChangeJSONFileButton";
             this.ChangeJSONFileButton.PressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
             this.ChangeJSONFileButton.ShadowDecoration.Parent = this.ChangeJSONFileButton;
-            this.ChangeJSONFileButton.Size = new System.Drawing.Size(666, 57);
+            this.ChangeJSONFileButton.Size = new System.Drawing.Size(666, 56);
             this.ChangeJSONFileButton.TabIndex = 13;
             this.ChangeJSONFileButton.Text = "Change JSON File";
             this.ChangeJSONFileButton.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.ChangeJSONFileButton.TextOffset = new System.Drawing.Point(4, 0);
-            this.ChangeJSONFileButton.Click += new System.EventHandler(this.ChangeJSONFileButton_Click_1);
+            this.ChangeJSONFileButton.Click += new System.EventHandler(this.ChangeJSONFileButton_Click);
             // 
             // RecoveryButton
             // 
@@ -163,7 +164,7 @@
             this.RecoveryButton.Image = ((System.Drawing.Image)(resources.GetObject("RecoveryButton.Image")));
             this.RecoveryButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.RecoveryButton.ImageSize = new System.Drawing.Size(25, 25);
-            this.RecoveryButton.Location = new System.Drawing.Point(44, 299);
+            this.RecoveryButton.Location = new System.Drawing.Point(44, 242);
             this.RecoveryButton.Name = "RecoveryButton";
             this.RecoveryButton.PressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
             this.RecoveryButton.ShadowDecoration.Parent = this.RecoveryButton;
@@ -174,13 +175,43 @@
             this.RecoveryButton.TextOffset = new System.Drawing.Point(6, 0);
             this.RecoveryButton.Click += new System.EventHandler(this.RecoveryButton_Click);
             // 
+            // SpreadsheetConfigButton
+            // 
+            this.SpreadsheetConfigButton.Animated = true;
+            this.SpreadsheetConfigButton.BorderColor = System.Drawing.Color.Gray;
+            this.SpreadsheetConfigButton.BorderRadius = 10;
+            this.SpreadsheetConfigButton.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(187)))), ((int)(((byte)(251)))));
+            this.SpreadsheetConfigButton.CheckedState.Parent = this.SpreadsheetConfigButton;
+            this.SpreadsheetConfigButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.SpreadsheetConfigButton.CustomBorderColor = System.Drawing.Color.Gray;
+            this.SpreadsheetConfigButton.CustomBorderThickness = new System.Windows.Forms.Padding(0, 0, 0, 1);
+            this.SpreadsheetConfigButton.CustomImages.Parent = this.SpreadsheetConfigButton;
+            this.SpreadsheetConfigButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(250)))), ((int)(((byte)(249)))));
+            this.SpreadsheetConfigButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SpreadsheetConfigButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.SpreadsheetConfigButton.HoverState.Parent = this.SpreadsheetConfigButton;
+            this.SpreadsheetConfigButton.Image = ((System.Drawing.Image)(resources.GetObject("SpreadsheetConfigButton.Image")));
+            this.SpreadsheetConfigButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.SpreadsheetConfigButton.ImageSize = new System.Drawing.Size(25, 25);
+            this.SpreadsheetConfigButton.Location = new System.Drawing.Point(44, 355);
+            this.SpreadsheetConfigButton.Name = "SpreadsheetConfigButton";
+            this.SpreadsheetConfigButton.PressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.SpreadsheetConfigButton.ShadowDecoration.Parent = this.SpreadsheetConfigButton;
+            this.SpreadsheetConfigButton.Size = new System.Drawing.Size(666, 57);
+            this.SpreadsheetConfigButton.TabIndex = 15;
+            this.SpreadsheetConfigButton.Text = "Spreadsheet Configuration";
+            this.SpreadsheetConfigButton.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.SpreadsheetConfigButton.TextOffset = new System.Drawing.Point(6, 0);
+            this.SpreadsheetConfigButton.Click += new System.EventHandler(this.SpreadsheetConfigButton_Click);
+            // 
             // SettingsTab
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(250)))), ((int)(((byte)(249)))));
-            this.Controls.Add(this.RecoveryButton);
+            this.Controls.Add(this.SpreadsheetConfigButton);
             this.Controls.Add(this.ChangeJSONFileButton);
+            this.Controls.Add(this.RecoveryButton);
             this.Controls.Add(this.ChangePasswordButton);
             this.Controls.Add(this.HistoryButton);
             this.Controls.Add(this.SettingsLabel);
@@ -201,5 +232,6 @@
         public Guna.UI2.WinForms.Guna2Button ChangePasswordButton;
         public Guna.UI2.WinForms.Guna2Button ChangeJSONFileButton;
         public Guna.UI2.WinForms.Guna2Button RecoveryButton;
+        public Guna.UI2.WinForms.Guna2Button SpreadsheetConfigButton;
     }
 }

@@ -131,92 +131,106 @@ namespace Barangay_Clearance_System
         }
 
 
-    public static void InitializeDatabase()
-    {
-        try
+        public static void InitializeDatabase()
         {
-            // Delete the database if it exists
-            if (File.Exists(databasePath))
+            try
             {
-                File.Delete(databasePath);
+                // Delete the database if it exists
+                if (File.Exists(databasePath))
+                {
+                    File.Delete(databasePath);
+                }
+                else
+                {
+                    MessageBox.Show("Local Database Initialized.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                // Create a new database file
+                SQLiteConnection.CreateFile(databasePath);
+
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // Create the "sheet" table
+                    string createSheetTableQuery = @"
+                CREATE TABLE IF NOT EXISTS sheet (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    timestamp TEXT UNIQUE NOT NULL,
+                    email_address TEXT NOT NULL,
+                    name TEXT NOT NULL,
+                    purok_number TEXT NOT NULL,
+                    house_number TEXT,
+                    date_of_birth TEXT NOT NULL,
+                    place_of_birth TEXT NOT NULL,
+                    sex TEXT NOT NULL,
+                    civil_status TEXT NOT NULL,
+                    application_purpose TEXT NOT NULL,
+                    is_approved INTEGER DEFAULT 0,
+                    is_archived INTEGER DEFAULT 0
+                );";
+
+                    using (SQLiteCommand command = new SQLiteCommand(createSheetTableQuery, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+
+                    // Create the "settings" table
+                    string createSettingsTableQuery = @"
+                CREATE TABLE IF NOT EXISTS settings (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    password TEXT DEFAULT '',
+                    config_json TEXT
+                );";
+
+                    using (SQLiteCommand command = new SQLiteCommand(createSettingsTableQuery, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+
+                    string insertDefaultPasswordQuery = @"
+                INSERT INTO settings (password, config_json)
+                VALUES (@password, NULL)";
+                    using (SQLiteCommand command = new SQLiteCommand(insertDefaultPasswordQuery, connection))
+                    {
+                        string defaultPassword = AuthForm.HashPassword("");
+                        command.Parameters.AddWithValue("@password", defaultPassword);
+                        command.ExecuteNonQuery();
+                    }
+
+                    // Create the "recovery_codes" table
+                    string createRecoveryCodesTableQuery = @"
+                CREATE TABLE IF NOT EXISTS recovery_codes (
+                    code TEXT NOT NULL,
+                    is_used INTEGER NOT NULL DEFAULT 0,
+                    PRIMARY KEY (code)
+                );";
+
+                    using (SQLiteCommand command = new SQLiteCommand(createRecoveryCodesTableQuery, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+
+                    // Create the "google_sheets" table
+                    string createGoogleSheetsTableQuery = @"
+                CREATE TABLE IF NOT EXISTS google_sheets (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    spreadsheet_id TEXT,
+                    range TEXT
+                );";
+
+                    using (SQLiteCommand command = new SQLiteCommand(createGoogleSheetsTableQuery, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+
+                    connection.Close();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Local Database Initialized.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Console.WriteLine($"Database initialization failed: {ex.Message}");
             }
-
-            // Create a new database file
-            SQLiteConnection.CreateFile(databasePath);
-
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-
-                // Create the "sheet" table
-                string createSheetTableQuery = @"
-                    CREATE TABLE IF NOT EXISTS sheet (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        timestamp TEXT UNIQUE NOT NULL,
-                        email_address TEXT NOT NULL,
-                        name TEXT NOT NULL,
-                        purok_number TEXT NOT NULL,
-                        house_number TEXT,
-                        date_of_birth TEXT NOT NULL,
-                        place_of_birth TEXT NOT NULL,
-                        sex TEXT NOT NULL,
-                        civil_status TEXT NOT NULL,
-                        application_purpose TEXT NOT NULL,
-                        is_approved INTEGER DEFAULT 0,
-                        is_archived INTEGER DEFAULT 0
-                    );";
-
-                using (SQLiteCommand command = new SQLiteCommand(createSheetTableQuery, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-
-                string createSettingsTableQuery = @"
-                    CREATE TABLE IF NOT EXISTS settings (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        password TEXT DEFAULT '',
-                        config_json TEXT
-                    );";
-
-                using (SQLiteCommand command = new SQLiteCommand(createSettingsTableQuery, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-
-                string insertDefaultPasswordQuery = @"
-                    INSERT INTO settings (password, config_json)
-                    VALUES (@password, NULL)";
-                using (SQLiteCommand command = new SQLiteCommand(insertDefaultPasswordQuery, connection))
-                {
-                    string defaultPassword = AuthForm.HashPassword(""); // Replace with an actual default password
-                    command.Parameters.AddWithValue("@password", defaultPassword);
-                    command.ExecuteNonQuery();
-                }
-
-                // Create the "recovery_codes" table
-                string createRecoveryCodesTableQuery = @"
-                    CREATE TABLE IF NOT EXISTS recovery_codes (
-                        code TEXT NOT NULL,
-                        is_used INTEGER NOT NULL DEFAULT 0,
-                        PRIMARY KEY (code)
-                    );";
-
-                using (SQLiteCommand command = new SQLiteCommand(createRecoveryCodesTableQuery, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-
-                connection.Close();
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Database initialization failed: {ex.Message}");
         }
     }
-}
 }

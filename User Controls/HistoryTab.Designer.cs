@@ -32,28 +32,29 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HistoryTab));
-            HistoryGridViewPanel = new System.Windows.Forms.Panel();
+            this.HistoryGridViewPanel = new System.Windows.Forms.Panel();
             HistoryGridView = new Guna.UI2.WinForms.Guna2DataGridView();
-            MonthCombobox = new Guna.UI2.WinForms.Guna2ComboBox();
+            FilterCombobox = new Guna.UI2.WinForms.Guna2ComboBox();
             RecentOldestCombobox = new Guna.UI2.WinForms.Guna2ComboBox();
             this.HardDriveIcon1 = new System.Windows.Forms.PictureBox();
             this.HistoryLabel = new System.Windows.Forms.Label();
-            HistoryGridViewPanel.SuspendLayout();
+            this.ExportButton = new Guna.UI2.WinForms.Guna2Button();
+            this.HistoryGridViewPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(HistoryGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HardDriveIcon1)).BeginInit();
             this.SuspendLayout();
             // 
             // HistoryGridViewPanel
             // 
-            HistoryGridViewPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.HistoryGridViewPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            HistoryGridViewPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            HistoryGridViewPanel.Controls.Add(HistoryGridView);
-            HistoryGridViewPanel.Location = new System.Drawing.Point(41, 115);
-            HistoryGridViewPanel.Name = "HistoryGridViewPanel";
-            HistoryGridViewPanel.Size = new System.Drawing.Size(1049, 506);
-            HistoryGridViewPanel.TabIndex = 8;
+            this.HistoryGridViewPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.HistoryGridViewPanel.Controls.Add(HistoryGridView);
+            this.HistoryGridViewPanel.Location = new System.Drawing.Point(41, 115);
+            this.HistoryGridViewPanel.Name = "HistoryGridViewPanel";
+            this.HistoryGridViewPanel.Size = new System.Drawing.Size(1049, 437);
+            this.HistoryGridViewPanel.TabIndex = 8;
             // 
             // HistoryGridView
             // 
@@ -89,7 +90,7 @@
             HistoryGridView.ReadOnly = true;
             HistoryGridView.RowHeadersVisible = false;
             HistoryGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            HistoryGridView.Size = new System.Drawing.Size(1047, 504);
+            HistoryGridView.Size = new System.Drawing.Size(1047, 435);
             HistoryGridView.TabIndex = 11;
             HistoryGridView.Theme = Guna.UI2.WinForms.Enums.DataGridViewPresetThemes.Default;
             HistoryGridView.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.SystemColors.ControlLight;
@@ -114,33 +115,37 @@
             HistoryGridView.ThemeStyle.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(232)))), ((int)(((byte)(247)))));
             HistoryGridView.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             // 
-            // MonthCombobox
+            // FilterCombobox
             // 
-            MonthCombobox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            MonthCombobox.BackColor = System.Drawing.Color.Transparent;
-            MonthCombobox.BorderColor = System.Drawing.Color.Black;
-            MonthCombobox.Cursor = System.Windows.Forms.Cursors.Arrow;
-            MonthCombobox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            MonthCombobox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            MonthCombobox.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(250)))), ((int)(((byte)(249)))));
-            MonthCombobox.FocusedColor = System.Drawing.Color.Empty;
-            MonthCombobox.FocusedState.Parent = MonthCombobox;
-            MonthCombobox.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            MonthCombobox.ForeColor = System.Drawing.Color.Black;
-            MonthCombobox.FormattingEnabled = true;
-            MonthCombobox.HoverState.Parent = MonthCombobox;
-            MonthCombobox.ItemHeight = 34;
-            MonthCombobox.Items.AddRange(new object[] {
-            "-- All Months --"});
-            MonthCombobox.ItemsAppearance.Parent = MonthCombobox;
-            MonthCombobox.Location = new System.Drawing.Point(903, 68);
-            MonthCombobox.Name = "MonthCombobox";
-            MonthCombobox.ShadowDecoration.Parent = MonthCombobox;
-            MonthCombobox.Size = new System.Drawing.Size(186, 40);
-            MonthCombobox.StartIndex = 0;
-            MonthCombobox.TabIndex = 30;
-            MonthCombobox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            MonthCombobox.SelectedIndexChanged += new System.EventHandler(MonthCombobox_SelectedIndexChanged);
+            FilterCombobox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            FilterCombobox.BackColor = System.Drawing.Color.Transparent;
+            FilterCombobox.BorderColor = System.Drawing.Color.Black;
+            FilterCombobox.Cursor = System.Windows.Forms.Cursors.Arrow;
+            FilterCombobox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            FilterCombobox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            FilterCombobox.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(250)))), ((int)(((byte)(249)))));
+            FilterCombobox.FocusedColor = System.Drawing.Color.Empty;
+            FilterCombobox.FocusedState.Parent = FilterCombobox;
+            FilterCombobox.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            FilterCombobox.ForeColor = System.Drawing.Color.Black;
+            FilterCombobox.FormattingEnabled = true;
+            FilterCombobox.HoverState.Parent = FilterCombobox;
+            FilterCombobox.ItemHeight = 34;
+            FilterCombobox.Items.AddRange(new object[] {
+            "-- All Records --",
+            "This Day",
+            "This Week",
+            "This Month",
+            "This Year"});
+            FilterCombobox.ItemsAppearance.Parent = FilterCombobox;
+            FilterCombobox.Location = new System.Drawing.Point(711, 68);
+            FilterCombobox.Name = "FilterCombobox";
+            FilterCombobox.ShadowDecoration.Parent = FilterCombobox;
+            FilterCombobox.Size = new System.Drawing.Size(186, 40);
+            FilterCombobox.StartIndex = 0;
+            FilterCombobox.TabIndex = 30;
+            FilterCombobox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            FilterCombobox.SelectedIndexChanged += new System.EventHandler(this.FilterCombobox_SelectedIndexChanged);
             // 
             // RecentOldestCombobox
             // 
@@ -162,14 +167,14 @@
             "Recent to Oldest",
             "Oldest to Recent"});
             RecentOldestCombobox.ItemsAppearance.Parent = RecentOldestCombobox;
-            RecentOldestCombobox.Location = new System.Drawing.Point(711, 68);
+            RecentOldestCombobox.Location = new System.Drawing.Point(903, 68);
             RecentOldestCombobox.Name = "RecentOldestCombobox";
             RecentOldestCombobox.ShadowDecoration.Parent = RecentOldestCombobox;
             RecentOldestCombobox.Size = new System.Drawing.Size(186, 40);
             RecentOldestCombobox.StartIndex = 0;
             RecentOldestCombobox.TabIndex = 31;
             RecentOldestCombobox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            RecentOldestCombobox.SelectedIndexChanged += new System.EventHandler(RecentOldestCombobox_SelectedIndexChanged);
+            RecentOldestCombobox.SelectedIndexChanged += new System.EventHandler(this.RecentOldestCombobox_SelectedIndexChanged);
             // 
             // HardDriveIcon1
             // 
@@ -191,19 +196,38 @@
             this.HistoryLabel.TabIndex = 32;
             this.HistoryLabel.Text = "History";
             // 
+            // ExportButton
+            // 
+            this.ExportButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.ExportButton.CheckedState.Parent = this.ExportButton;
+            this.ExportButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ExportButton.CustomImages.Parent = this.ExportButton;
+            this.ExportButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.ExportButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ExportButton.ForeColor = System.Drawing.Color.White;
+            this.ExportButton.HoverState.Parent = this.ExportButton;
+            this.ExportButton.Location = new System.Drawing.Point(430, 575);
+            this.ExportButton.Name = "ExportButton";
+            this.ExportButton.ShadowDecoration.Parent = this.ExportButton;
+            this.ExportButton.Size = new System.Drawing.Size(253, 45);
+            this.ExportButton.TabIndex = 12;
+            this.ExportButton.Text = "Export";
+            this.ExportButton.Click += new System.EventHandler(this.ExportButton_Click);
+            // 
             // HistoryTab
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(250)))), ((int)(((byte)(249)))));
+            this.Controls.Add(this.ExportButton);
             this.Controls.Add(this.HardDriveIcon1);
             this.Controls.Add(this.HistoryLabel);
             this.Controls.Add(RecentOldestCombobox);
-            this.Controls.Add(MonthCombobox);
-            this.Controls.Add(HistoryGridViewPanel);
+            this.Controls.Add(FilterCombobox);
+            this.Controls.Add(this.HistoryGridViewPanel);
             this.Name = "HistoryTab";
             this.Size = new System.Drawing.Size(1130, 649);
-            HistoryGridViewPanel.ResumeLayout(false);
+            this.HistoryGridViewPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(HistoryGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HardDriveIcon1)).EndInit();
             this.ResumeLayout(false);
@@ -213,10 +237,11 @@
 
         #endregion
         private System.Windows.Forms.Panel HistoryGridViewPanel;
-        public static Guna.UI2.WinForms.Guna2DataGridView HistoryGridView;
-        public static Guna.UI2.WinForms.Guna2ComboBox MonthCombobox;
-        public static Guna.UI2.WinForms.Guna2ComboBox RecentOldestCombobox;
         private System.Windows.Forms.PictureBox HardDriveIcon1;
         private System.Windows.Forms.Label HistoryLabel;
+        private Guna.UI2.WinForms.Guna2Button ExportButton;
+        public static Guna.UI2.WinForms.Guna2DataGridView HistoryGridView;
+        public static Guna.UI2.WinForms.Guna2ComboBox FilterCombobox;
+        public static Guna.UI2.WinForms.Guna2ComboBox RecentOldestCombobox;
     }
 }

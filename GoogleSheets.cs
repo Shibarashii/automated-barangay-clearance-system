@@ -1,13 +1,10 @@
 ﻿using Google.Apis.Sheets.v4;
 using System;
 using System.Data.SQLite;
-using System.IO;
-using System.Reflection;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using System.Linq;
 using System.Windows.Forms;
-using Barangay_Clearance_System.User_Controls;
 using Google.Apis.Sheets.v4.Data;
 using System.Collections.Generic;
 
@@ -17,11 +14,17 @@ namespace Barangay_Clearance_System
     {
         private static readonly string[] scopes = { SheetsService.Scope.Spreadsheets };
         private static readonly string applicationName = "BarangayClearance";
-        private static readonly string spreadSheetID = "1ONH2Kxfurs0xAw62E8rLBIdCN6EqCy37z34y3qQCerk";
-        private static readonly string range = "Form Responses 1!A2:J";
+        public static string spreadSheetID;
+        public static string range;
 
         public static void FetchDataAndInsert()
         {
+            if (spreadSheetID == null ||  range == null)
+            {
+                MessageBox.Show("Please set the spreadsheet ID and range first in settings.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             // Authenticate with the Google Sheets API using the provided JSON file
             var credential = GoogleCredential.FromFile(Main.JSONFilePath).CreateScoped(scopes);
 
@@ -69,23 +72,19 @@ namespace Barangay_Clearance_System
             {
                 var credential = GoogleCredential.FromFile(Main.JSONFilePath).CreateScoped(scopes);
 
-                // Create the Sheets API service
                 var service = new SheetsService(new BaseClientService.Initializer()
                 {
                     HttpClientInitializer = credential,
                     ApplicationName = applicationName,
                 });
 
-                // Fetch the metadata to get the SheetId of the first sheet
                 var spreadsheet = service.Spreadsheets.Get(spreadSheetID).Execute();
                 var sheetId = spreadsheet.Sheets[0].Properties.SheetId;  // Getting SheetId of the first sheet
 
-                // Fetch the current data
                 var request = service.Spreadsheets.Values.Get(spreadSheetID, range);
                 var response = request.Execute();
                 var values = response.Values;
 
-                // Find the row to delete by comparing timestamp
                 int rowIndex = -1;
                 for (int i = 0; i < values.Count; i++)
                 {
